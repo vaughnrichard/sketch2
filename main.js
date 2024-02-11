@@ -42,16 +42,17 @@ scene.add( plane );
 
 // cube.position.set(0, 0, 5);
 
-addCircletoScene(22, 1);
+addCircletoScene(50, 1, 'xz');
+addCircletoScene(50, 1, 'yz');
 
-camera.position.set(0, 5, 0);
+camera.position.set(1, 5, 0);
 
 camera.up.set(0,0,1);
 // camera.lookAt( cube.position );
 camera.lookAt( 0, 0, 0);
 
 function animate() {
-	requestAnimationFrame( animate );
+	// requestAnimationFrame( animate );
 
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
