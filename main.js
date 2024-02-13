@@ -42,23 +42,20 @@ const camera = vis.camera;
 
 // cube.position.set(0, 0, 5);
 
-const num_lines = 20;
+const num_lines = 30;
 for (let i = 0; i < num_lines; i++) {
 	// addCircletoScene(50, 1, new THREE.Vector3(0, 0, i / 3), [0, Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], 0xff0000);
+	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0], 0xff0000);
 
-	addCircletoScene(50, 1, new THREE.Vector3(-2, 2, 2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(-2, 2, 2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(-2, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], 0x00ff00);
+	addCircletoScene(50, 1, new THREE.Vector3(-2, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0], 0x00ff00);
 
-	addCircletoScene(50, 1, new THREE.Vector3(2, -2, -2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(2, -2, -2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(2, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], 0x0000ff);
+	addCircletoScene(50, 1, new THREE.Vector3(2, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0], 0x0000ff);
 
-	addCircletoScene(50, 1, new THREE.Vector3(-2, -2, -2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(-2, -2, -2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
-
-	addCircletoScene(50, 1, new THREE.Vector3(2, 2, 2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
-	addCircletoScene(50, 1, new THREE.Vector3(2, 2, 2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+	addCircletoScene(50, 3, new THREE.Vector3(0, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0]);
+	addCircletoScene(50, 3, new THREE.Vector3(0, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0]);
 }
 // addCircletoScene(50, 1, 'yz');
 
@@ -73,9 +70,9 @@ function animate() {
 
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
-	vis.objects.forEach( (line) => {
-		line.rotateOnAxis(new THREE.Vector3(0, 0, 1), .002);
-	})
+	// vis.objects.forEach( (line) => {
+	// 	line.rotateOnAxis(new THREE.Vector3(0, 0, 1), .002);
+	// })
 
 	renderer.render( scene, camera );
 }

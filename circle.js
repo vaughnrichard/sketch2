@@ -1,6 +1,12 @@
 import * as THREE from 'three';
 import { vis } from './init.js'
 
+class circle {
+  constructor(lines, origin) {
+    this.lines = lines;
+    this.origin = origin;
+  }
+}
 
 function generateCirclePoints(numberOfPoints, radius) {
   const length = 2 * Math.PI;
@@ -39,7 +45,7 @@ function adjustCirclePoints(points, origin, rotationArray) {
   points.map(transformPoints);
 }
 
-function createCircleLine(numberOfPoints, radius, origin, rotationArray) {
+function createCircleLine(numberOfPoints, radius, origin, rotationArray, color) {
   const points = generateCirclePoints(numberOfPoints, radius);
 
   adjustCirclePoints(points, origin, rotationArray);
@@ -47,15 +53,15 @@ function createCircleLine(numberOfPoints, radius, origin, rotationArray) {
   const geometry = new THREE.BufferGeometry().setFromPoints( points );
 
   const material = new THREE.LineBasicMaterial({
-    color: 0xff0000
+    color: color
   });
 
   const line = new THREE.Line( geometry, material );
   return line;
 }
 
-function addCircletoScene(numberOfPoints, radius, origin, rotationArray) {
-  const line = createCircleLine(numberOfPoints, radius, origin, rotationArray);
+function addCircletoScene(numberOfPoints, radius, origin, rotationArray, color=0xffffff) {
+  const line = createCircleLine(numberOfPoints, radius, origin, rotationArray, color);
 
   vis.scene.add(line);
   vis.objects.push(line);
