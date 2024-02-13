@@ -2,9 +2,9 @@
  * My second sketch.
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/+esm';
+import * as THREE from 'three';
 import { vis } from './init.js';
-import { addCircletoScene } from './misc.js';
+import { addCircletoScene } from './circle.js';
 
 const scene = vis.scene;
 const renderer = vis.renderer;
@@ -35,27 +35,47 @@ const camera = vis.camera;
 
 // scene.add(splineObject);
 
-const floorGeometry = new THREE.PlaneGeometry( 100, 100 );
-const floorMaterial = new THREE.MeshBasicMaterial( {color: 0x8f8f8f, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( floorGeometry, floorMaterial );
-scene.add( plane );
+// const floorGeometry = new THREE.PlaneGeometry( 100, 100 );
+// const floorMaterial = new THREE.MeshBasicMaterial( {color: 0x8f8f8f, side: THREE.DoubleSide} );
+// const plane = new THREE.Mesh( floorGeometry, floorMaterial );
+// scene.add( plane );
 
 // cube.position.set(0, 0, 5);
 
-addCircletoScene(50, 1, 'xz');
-addCircletoScene(50, 1, 'yz');
+const num_lines = 20;
+for (let i = 0; i < num_lines; i++) {
+	// addCircletoScene(50, 1, new THREE.Vector3(0, 0, i / 3), [0, Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(0, 0, 0), [0, (i * (Math.PI * 2 / num_lines)), 0] );
 
-camera.position.set(1, 5, 0);
+	addCircletoScene(50, 1, new THREE.Vector3(-2, 2, 2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(-2, 2, 2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+
+	addCircletoScene(50, 1, new THREE.Vector3(2, -2, -2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(2, -2, -2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+
+	addCircletoScene(50, 1, new THREE.Vector3(-2, -2, -2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(-2, -2, -2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+
+	addCircletoScene(50, 1, new THREE.Vector3(2, 2, 2), [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0] );
+	addCircletoScene(50, 1, new THREE.Vector3(2, 2, 2), [0, (i * (Math.PI * 2 / num_lines)), 0] );
+}
+// addCircletoScene(50, 1, 'yz');
+
+camera.position.set(0, 5, 0);
 
 camera.up.set(0,0,1);
 // camera.lookAt( cube.position );
 camera.lookAt( 0, 0, 0);
 
 function animate() {
-	// requestAnimationFrame( animate );
+	requestAnimationFrame( animate );
 
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
+	vis.objects.forEach( (line) => {
+		line.rotateOnAxis(new THREE.Vector3(0, 0, 1), .002);
+	})
 
 	renderer.render( scene, camera );
 }

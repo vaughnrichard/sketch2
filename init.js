@@ -3,7 +3,8 @@
  * strucutures do manage the visualization.
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/+esm'
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /**
  * The data structure representing the visualization scene.
@@ -15,6 +16,11 @@ class visualization {
     this.renderer = new THREE.WebGLRenderer();
 
     this.initVis();
+
+    this.camera.up.set(0, 0, 1);
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+
+    this.objects = [];
   }
 
   initVis() {
