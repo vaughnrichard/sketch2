@@ -39,6 +39,9 @@ class visualization {
 
     /* add in animation things */
 
+    // vis.movePoints();
+    // vis.objects[0].movePoints();
+
     renderer.render( scene, camera );
   }
 }
