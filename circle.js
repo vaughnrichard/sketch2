@@ -1,30 +1,71 @@
 import * as THREE from 'three';
 import { vis } from './init.js'
 
-class circle {
-  constructor(points, origin) {
-    this.points = points;
-    this.origin = origin;
+const waveAdjustfactor = (1 / 60 / Math.PI * 10) * 1/2;
+
+class sphere {
+  constructor(origin) {
+    this.origin = origin; // origin in world space
+
+    // this.circles = new Array();
+    this.points = new Array();
     this.objectList = new Array();
+
+    this.movement_step = 0;
   }
 
-  movePoints() {
-    // this.objectList.forEach( (object) => {
-    //   const scaleFactor = Math.random() * .1 + 0.95;
-
-    //   object.position.multiplyS
-    // });
+  vibrate() {
+    const scaleFactor = Math.cos(this.movement_step++ * waveAdjustfactor) * .1 + 1;
 
     for (let i = 0; i < this.points.length; i++) {
-      const scaleFactor = Math.random() * .4 + 0.80;
-
       const newPos = this.points[i].clone().multiplyScalar(scaleFactor);
-      console.log(newPos);
       this.objectList[i].position.copy( newPos );
-      // console.log
     }
   }
+
+  /**
+   * Move the sphere 
+   * @param {Vector3} worldPos new world position 
+   */
+  moveToWorldPos(worldPos) {
+    const originShift = new THREE.Vector3().subVectors(worldPos, this.origin);
+
+    this.moveRelativePos(originShift);
+  }
+
+  /**
+   * Move a relative position in world space. I.e. 1 unit along x in world space.
+   * @param {Vector3} relPos relative position to move in world space
+   */
+  moveRelativePos(relPos) {
+    // console.log(relPos);
+    for (let i = 0; i < this.points.length; i++) {
+      this.points[i].add(relPos);
+      this.objectList[i].position.add(relPos);
+    }
+
+    this.origin.add(relPos);
+  }
 }
+
+// class circle {
+//   constructor(points, origin) {
+//     this.points = points;
+//     this.origin = origin;
+//     this.objectList = new Array();
+    
+//     this.movement_step = 0;
+//   }
+
+//   vibratePoints() {
+//     for (let i = 0; i < this.points.length; i++) {
+//       const scaleFactor = Math.cos(this.movement_step++ * waveAdjustfactor) * .1 + 1;
+
+//       const newPos = this.points[i].clone().multiplyScalar(scaleFactor);
+//       this.objectList[i].position.copy( newPos );
+//     }
+//   }
+// }
 
 function generateCirclePoints(numberOfPoints, radius) {
   const length = 2 * Math.PI;
@@ -63,7 +104,7 @@ function adjustCirclePoints(points, origin, rotationArray) {
   points.map(transformPoints);
 }
 
-function createCircleLine(numberOfPoints, radius, origin, rotationArray, color) {
+function createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, color, newSphere) {
   const points = generateCirclePoints(numberOfPoints, radius);
 
   adjustCirclePoints(points, origin, rotationArray);
@@ -71,36 +112,35 @@ function createCircleLine(numberOfPoints, radius, origin, rotationArray, color) 
   const geometry = new THREE.SphereGeometry( .005, 32, 16 ); 
   const material = new THREE.MeshBasicMaterial( { color: 0xfffff } );
 
-  const circ = new circle(points, origin);
+  // const circ = new circle(points, origin);
 
   points.forEach( (point) => {
     const sphere = new THREE.Mesh( geometry, material );
     sphere.position.copy( point );
 
-    // console.log(sphere);
     vis.scene.add(sphere);
-    circ.objectList.push(sphere);
+    
+    newSphere.points.push(point);
+    newSphere.objectList.push(sphere);
+    // circ.objectList.push(sphere);
   } );
 
-  vis.objects.push(circ);
-
-  // const geometry = new THREE.BufferGeometry().setFromPoints( points );
-
-  // const material = new THREE.LineBasicMaterial({
-  //   color: color
-  // });
-
-  // const line = new THREE.Line( geometry, material );
-  // return line;
-
-  return []
+  // newSphere.circles.push(circ);
 }
 
-function addCircletoScene(numberOfPoints, radius, origin, rotationArray, color=0xffffff) {
-  const line = createCircleLine(numberOfPoints, radius, origin, rotationArray, color);
-
-  // vis.scene.add(line);
-  // vis.objects.push(line);
+function addCircletoScene(numberOfPoints, radius, origin, rotationArray, color=0xffffff, newSphere) {
+  createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, color, newSphere);
 }
 
-export { addCircletoScene }
+function addSphere(num_lines, pointsPerCircle, radius, origin, color) {
+  const newSphere = new sphere(origin);
+
+  for (let i = 0; i < num_lines; i++) {
+    addCircletoScene(pointsPerCircle, radius, origin, [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], color, newSphere);
+    addCircletoScene(pointsPerCircle, radius, origin, [0, (i * (Math.PI * 2 / num_lines)), 0], color, newSphere);
+  }
+
+  vis.objects.push(newSphere);
+}
+
+export { addSphere }
