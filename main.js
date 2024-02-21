@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { vis } from './init.js';
 import { addSphere } from './circle.js';
+import { addTest } from './physSim.js';
 
 const scene = vis.scene;
 const renderer = vis.renderer;
@@ -44,9 +45,11 @@ const camera = vis.camera;
 
 // cube.position.set(0, 0, 5);
 
-const num_lines = 40;
-const num_points = 50;
-addSphere(num_lines, num_points, 1, new THREE.Vector3(0, 0, 0), 0xFFF000);
+// const num_lines = 40;
+// const num_points = 50;
+// addSphere(num_lines, num_points, 1, new THREE.Vector3(0, 0, 0), 0xFFF000);
+
+addTest();
 
 camera.position.set(0, 5, 0);
 
@@ -62,12 +65,13 @@ function animate() {
 	vis.objects.forEach( (sphere) => {
 		// sphere.vibrate();
 
-		const x_pos = Math.cos(step * .01) * 1;
-		const z_pos = Math.sin(step * .01) * 1;
-		step++;
-		const newPos = new THREE.Vector3( -x_pos, 0, z_pos );
+		// const x_pos = Math.cos(step * .01) * 1;
+		// const z_pos = Math.sin(step * .01) * 1;
+		// step++;
+		// const newPos = new THREE.Vector3( -x_pos, 0, z_pos );
 
-		sphere.moveToWorldPos(newPos);
+		// sphere.moveToWorldPos(newPos);
+		vis.objects[0].takeStep();
 	});
 
 	renderer.render( scene, camera );
