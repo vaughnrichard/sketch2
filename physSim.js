@@ -6,7 +6,7 @@ import { vis } from './init.js';
  */
 
 const gravityValue = 0.5;
-const stepSize = 1/60;
+const stepSize = 1/30;
 
 
 /**
@@ -30,7 +30,6 @@ class phys {
     // console.log(deltaPosition);
     this.position.add(deltaPosition);
     this.velocity.copy(deltaPosition.multiplyScalar(1/stepSize));
-    // need to update velo as well
 
 
   }
@@ -38,8 +37,8 @@ class phys {
 
 class testObj extends phys {
   constructor() {
-    const position = new THREE.Vector3(5, 0, 0);
-    const velocity = new THREE.Vector3(0, 0, 10);
+    const position = new THREE.Vector3(25, 0, 0);
+    const velocity = new THREE.Vector3(0, 0, 5);
     super(position, velocity);
     const geometry = new THREE.SphereGeometry( 1, 32, 16 ); 
     const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } ); 
@@ -55,8 +54,9 @@ class testObj extends phys {
   }
 }
 
-function addTest() {
-  const testingObj = new testObj();  
+function addTest(velo) {
+  const testingObj = new testObj();
+  testingObj.velocity = velo;
   vis.objects.push(testingObj);
 }
 

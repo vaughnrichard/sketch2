@@ -13,11 +13,11 @@ const scene = vis.scene;
 const renderer = vis.renderer;
 const camera = vis.camera;
 
-// const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 
-// const material = new THREE.MeshBasicMaterial( { color: 0xFF00FF } );
-// const cube = new THREE.Mesh( geometry, material );
-// scene.add( cube );
+const material = new THREE.MeshBasicMaterial( { color: 0xFF00FF } );
+const cube = new THREE.Mesh( geometry, material );
+scene.add( cube );
 
 // Create a sine-like wave
 // const curve = new THREE.SplineCurve( [
@@ -49,7 +49,10 @@ const camera = vis.camera;
 // const num_points = 50;
 // addSphere(num_lines, num_points, 1, new THREE.Vector3(0, 0, 0), 0xFFF000);
 
-addTest();
+addTest(new THREE.Vector3(0, 0, 5));
+addTest(new THREE.Vector3(0, 5, 0));
+// addTest(new THREE.Vector3(0, Math.sqrt(5), Math.sqrt(5)));
+// addTest(new THREE.Vector3(5, 15, 5));
 
 camera.position.set(0, 5, 0);
 
@@ -72,6 +75,10 @@ function animate() {
 
 		// sphere.moveToWorldPos(newPos);
 		vis.objects[0].takeStep();
+
+		vis.objects.forEach( (test) => {
+			test.takeStep();
+		})
 	});
 
 	renderer.render( scene, camera );
