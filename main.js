@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { vis } from './init.js';
 import { sphere } from './sphere.js';
 
+
 const scene = vis.scene;
 const renderer = vis.renderer;
 const camera = vis.camera;
@@ -19,16 +20,16 @@ const origin = new THREE.Mesh( geometry, material );
 origin.position.set(0, 0, 0);
 scene.add( origin );
 
-const testsphere = new sphere({
-	origin: new THREE.Vector3(3, 0, 0),
-	pointsPerCircle: 50,
-	num_lines: 40,
-	radius: 1,
-	color: 0xff0000,
-	velocity: new THREE.Vector3(0, 0, .01),
-	mass: 1,
-	charge: 1
-})
+// const testsphere = new sphere({
+// 	position: new THREE.Vector3(3, 0, 0),
+// 	pointsPerCircle: 50,
+// 	num_lines: 40,
+// 	radius: 1,
+// 	color: 0xff0000,
+// 	velocity: new THREE.Vector3(0, 0, .01),
+// 	mass: 1,
+// 	charge: 1
+// })
 
 camera.position.set(0, 5, 0);
 
@@ -41,10 +42,54 @@ function animate() {
 	requestAnimationFrame( animate );
 
 	vis.objects.forEach( (sphere) => {
-		testsphere.takeStep();
+		sphere.takeStep();
+		sphere.vibrate();
 	});
 
 	renderer.render( scene, camera );
 }
 
+const sphereArray = []
+
+const sphere0 = new sphere({
+	position: new THREE.Vector3(4, 0, 0),
+	pointsPerCircle: 50,
+	num_lines: 40,
+	radius: 1,
+	color: 0x0fffff,
+	velocity: new THREE.Vector3(0, -.002, 0),
+	mass: 1,
+	charge: 1,
+  id: 0
+});
+sphereArray.push(sphere0);
+
+const sphere1 = new sphere({
+	position: new THREE.Vector3(-4, 0, 0),
+	pointsPerCircle: 50,
+	num_lines: 40,
+	radius: 1,
+	color: 0xffff0f,
+	velocity: new THREE.Vector3(0, .002, 0),
+	mass: 1,
+	charge: 1,
+  id: 1
+});
+sphereArray.push(sphere1);
+
+const sphere2 = new sphere({
+	position: new THREE.Vector3(0, -2, 0),
+	pointsPerCircle: 50,
+	num_lines: 40,
+	radius: 1,
+	color: 0xff0fff,
+	velocity: new THREE.Vector3(0, 0, 0),
+	mass: 1,
+	charge: 3,
+  id: 2
+});
+sphereArray.push(sphere1);
+
 animate();
+
+export {sphereArray}

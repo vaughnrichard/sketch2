@@ -6,14 +6,14 @@ const waveAdjustfactor = (1 / 60 / Math.PI * 10) * 1/2;
 
 class sphere extends physics {
   constructor(properties={}) {
-//num_lines, pointsPerCircle, radius, origin, color
-    const origin = properties['origin'] || new THREE.Vector3(0, 0, 0); // origin in world space
+//num_lines, pointsPerCircle, radius, position, color
+    const position = properties['position'] || new THREE.Vector3(0, 0, 0); // position in world space
     const velocity = properties['velocity'] || new THREE.Vector3(0, 0, 0);
     const mass = properties['mass'] || 1;
     const charge = properties['charge'] || 1;
 
     const physParams = {
-      origin: origin,
+      position: position,
       velocity: velocity,
       mass: mass,
       charge: charge
@@ -26,6 +26,8 @@ class sphere extends physics {
     this.radius = properties['radius'] || 1;
     this.color = properties['color'] || 0xff0000;
 
+    this.id = properties['id'] || null;
+
 
     // this.circles = new Array();
     this.points = new Array();
@@ -33,26 +35,26 @@ class sphere extends physics {
     
     this.movement_step = 0;
 
-    addSphere(this.num_lines, this.pointsPerCircle, this.radius, this.origin, this.color, this);
+    addSphere(this.num_lines, this.pointsPerCircle, this.radius, this.position, this.color, this);
   }
 
   vibrate() {
-    const scaleFactor = Math.cos(this.movement_step++ * waveAdjustfactor) * .1 + 1;
+    const scaleFactor = Math.cos(this.movement_step++ * waveAdjustfactor) * .3 + 1;
 
     for (let i = 0; i < this.points.length; i++) {
-      const newPos = this.points[i].clone().multiplyScalar(scaleFactor).add(this.origin);
+      const newPos = this.points[i].clone().multiplyScalar(scaleFactor).add(this.position);
       this.objectList[i].position.copy( newPos );
     }
   }
 
   takeStep() {
     // console.log('here');
-    // console.log("before", this.origin);
+    // console.log("before", this.position);
     // console.log("velo", this.velocity);
     super.takeStep();
 
-    // console.log("newPos", this.origin);
-    this.moveToWorldPos(this.origin);
+    // console.log("newPos", this.position);
+    this.moveToWorldPos(this.position);
   }
 
   /**
@@ -60,7 +62,7 @@ class sphere extends physics {
    * @param {Vector3} worldPos new world position 
    */
   moveToWorldPos(worldPos) {
-    // const originShift = new THREE.Vector3().subVectors(worldPos, this.origin);
+    // const positionShift = new THREE.Vector3().subVectors(worldPos, this.position);
 
     for (let i = 0; i < this.points.length; i++) {
       const newPos = this.points[i].clone().add(worldPos);
@@ -79,7 +81,7 @@ class sphere extends physics {
       this.objectList[i].position.add(relPos);
     }
 
-    this.origin.add(relPos);
+    this.position.add(relPos);
   }
 }
 
@@ -100,7 +102,7 @@ function generateCirclePoints(numberOfPoints, radius) {
 /**
  * 
  * @param {Array<THREE.Vector3>} points 
- * @param {THREE.Vector3} origin 
+ * @param {THREE.Vector3} position 
  * @param {THREE.Vector3} planeVector
  */
 function adjustCirclePoints(points, rotationArray) {
@@ -114,25 +116,25 @@ function adjustCirclePoints(points, rotationArray) {
     point.applyAxisAngle(yAxis, rotationArray[1]);
     point.applyAxisAngle(zAxis, rotationArray[2]);
 
-    // point.add(origin);
+    // point.add(position);
   }
 
   points.map(transformPoints);
 }
 
-function createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, color, newSphere) {
+function createCircleFromPoints(numberOfPoints, radius, position, rotationArray, color, newSphere) {
   const points = generateCirclePoints(numberOfPoints, radius);
 
   adjustCirclePoints(points, rotationArray);
 
   const geometry = new THREE.SphereGeometry( .005, 32, 16 ); 
-  const material = new THREE.MeshBasicMaterial( { color: 0xfffff /**color */ } );
+  const material = new THREE.MeshBasicMaterial( { color: color } );
 
 
   points.forEach( (point) => {
     const sphere = new THREE.Mesh( geometry, material );
-    const pos = point.clone().add(origin);
-    // console.log(origin)
+    const pos = point.clone().add(position);
+    // console.log(position)
     sphere.position.copy( pos );
 
     vis.scene.add(sphere);
@@ -143,16 +145,16 @@ function createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, c
 
 }
 
-function addCircletoScene(numberOfPoints, radius, origin, rotationArray, color=0xffffff, newSphere) {
-  createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, color, newSphere);
+function addCircletoScene(numberOfPoints, radius, position, rotationArray, color=0xffffff, newSphere) {
+  createCircleFromPoints(numberOfPoints, radius, position, rotationArray, color, newSphere);
 }
 
-function addSphere(num_lines, pointsPerCircle, radius, origin, color, newSphere) {
-  // const newSphere = new sphere(origin);
+function addSphere(num_lines, pointsPerCircle, radius, position, color, newSphere) {
+  // const newSphere = new sphere(position);
 
   for (let i = 0; i < num_lines; i++) {
-    addCircletoScene(pointsPerCircle, radius, origin, [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], color, newSphere);
-    addCircletoScene(pointsPerCircle, radius, origin, [0, (i * (Math.PI * 2 / num_lines)), 0], color, newSphere);
+    addCircletoScene(pointsPerCircle, radius, position, [(i * (Math.PI * 2 / num_lines)), Math.PI / 2, 0], color, newSphere);
+    addCircletoScene(pointsPerCircle, radius, position, [0, (i * (Math.PI * 2 / num_lines)), 0], color, newSphere);
   }
 
   vis.objects.push(newSphere);
