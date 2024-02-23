@@ -14,9 +14,12 @@ const stepSize = 1/30;
  */
 
 class physics {
-  constructor(pos, velo) {
-    this.origin = (pos === undefined) ? new THREE.Vector3(0, 0, 0) : pos;
-    this.velocity = (velo === undefined) ? new THREE.Vector3(0, 0, 0) : velo;
+  constructor(physParams) {
+    this.origin = physParams['origin'] || new THREE.Vector3(0, 0, 0);
+    this.velocity = physParams['velocity'] || new THREE.Vector3(0, 0, 0);
+    this.mass = physParams['mass'] || 1;
+    this.charge = physParams['charge'] || 1;
+    // console.log(this.velocity);
   }
 
   takeStep() {
@@ -24,13 +27,7 @@ class physics {
     
     const gravityScale = (1 / (mag * mag));
     const gravityVector = this.origin.clone();
-    // console.log("gravity vector", gravityVector);
-    console.log("Begin step **********");
-    console.log("gravity scale", gravityScale);
-    console.log("origin", this.origin);
-    console.log("End step **********")
     gravityVector.multiplyScalar(-gravityScale * gravityValue);
-    // console.log(gravityVector);
 
     const deltaPosition = new THREE.Vector3().addVectors(this.velocity, gravityVector).multiplyScalar(stepSize);
     // console.log(deltaPosition);

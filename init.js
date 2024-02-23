@@ -1,6 +1,12 @@
 /**
  * This file deals with initalizing the scene and creating
  * strucutures do manage the visualization.
+ * 
+ * TODO:
+ * * import sphere class
+ * * create array that stores all spheres in the scene
+ * * create method that calculate force vector for each sphere / update vector
+ * * move everything to visualize animate loop for ease of use
  */
 
 import * as THREE from 'three';
@@ -36,11 +42,6 @@ class visualization {
 
   animate() {
     requestAnimationFrame( animate );
-
-    /* add in animation things */
-
-    // vis.movePoints();
-    // vis.objects[0].movePoints();
 
     renderer.render( scene, camera );
   }

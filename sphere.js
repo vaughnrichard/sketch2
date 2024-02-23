@@ -9,8 +9,17 @@ class sphere extends physics {
 //num_lines, pointsPerCircle, radius, origin, color
     const origin = properties['origin'] || new THREE.Vector3(0, 0, 0); // origin in world space
     const velocity = properties['velocity'] || new THREE.Vector3(0, 0, 0);
+    const mass = properties['mass'] || 1;
+    const charge = properties['charge'] || 1;
 
-    super(origin, velocity);
+    const physParams = {
+      origin: origin,
+      velocity: velocity,
+      mass: mass,
+      charge: charge
+    }
+
+    super(physParams);
 
     this.pointsPerCircle = properties['pointsPerCircle'] || 10;
     this.num_lines = properties['num_lines'] || 5;
@@ -122,8 +131,9 @@ function createCircleFromPoints(numberOfPoints, radius, origin, rotationArray, c
 
   points.forEach( (point) => {
     const sphere = new THREE.Mesh( geometry, material );
-    const pos = point.clone();
-    sphere.position.copy( pos.add(origin) );
+    const pos = point.clone().add(origin);
+    // console.log(origin)
+    sphere.position.copy( pos );
 
     vis.scene.add(sphere);
     
