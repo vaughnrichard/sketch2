@@ -43,7 +43,7 @@ function animate() {
 
 	vis.objects.forEach( (sphere) => {
 		sphere.takeStep();
-		sphere.vibrate();
+		// sphere.vibrate();
 	});
 
 	renderer.render( scene, camera );
@@ -52,12 +52,12 @@ function animate() {
 const sphereArray = []
 
 const sphere0 = new sphere({
-	position: new THREE.Vector3(4, 0, 0),
+	position: new THREE.Vector3(3, 0, 0),
 	pointsPerCircle: 50,
 	num_lines: 40,
 	radius: 1,
 	color: 0x0fffff,
-	velocity: new THREE.Vector3(0, -.002, 0),
+	velocity: new THREE.Vector3(0, -.02, 0),
 	mass: 1,
 	charge: 1,
   id: 0
@@ -65,12 +65,12 @@ const sphere0 = new sphere({
 sphereArray.push(sphere0);
 
 const sphere1 = new sphere({
-	position: new THREE.Vector3(-4, 0, 0),
+	position: new THREE.Vector3(0, 0, 0),
 	pointsPerCircle: 50,
 	num_lines: 40,
 	radius: 1,
 	color: 0xffff0f,
-	velocity: new THREE.Vector3(0, .002, 0),
+	velocity: new THREE.Vector3(0, .02, 0),
 	mass: 1,
 	charge: 1,
   id: 1
@@ -78,17 +78,30 @@ const sphere1 = new sphere({
 sphereArray.push(sphere1);
 
 const sphere2 = new sphere({
-	position: new THREE.Vector3(0, -2, 0),
+	position: new THREE.Vector3(-3, 0, 3),
 	pointsPerCircle: 50,
 	num_lines: 40,
 	radius: 1,
 	color: 0xff0fff,
 	velocity: new THREE.Vector3(0, 0, 0),
 	mass: 1,
-	charge: 3,
+	charge: 1,
   id: 2
 });
 sphereArray.push(sphere2);
+
+const sphere3 = new sphere({
+	position: new THREE.Vector3(5, 2, -5),
+	pointsPerCircle: 50,
+	num_lines: 40,
+	radius: 1,
+	color: 0xff0000,
+	velocity: new THREE.Vector3(0, 0, 0),
+	mass: 1,
+	charge: 1,
+  id: 3
+});
+sphereArray.push(sphere3);
 
 animate();
 
