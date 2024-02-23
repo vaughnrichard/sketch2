@@ -88,7 +88,7 @@ const sphere2 = new sphere({
 	charge: 3,
   id: 2
 });
-sphereArray.push(sphere1);
+sphereArray.push(sphere2);
 
 animate();
 
