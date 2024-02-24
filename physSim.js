@@ -16,14 +16,20 @@ class constant {
   }
 };
 
-const originGravity = new constant(1e-6);
+const originGravity = new constant(1e-4);
 const originG = originGravity.value;
 
-const particleGravity = new constant(.2);
+const particleGravity = new constant(.1);
 const G = particleGravity.value;
 
-const electric = new constant(1);
+const electric = new constant(.3);
 const C = electric.value;
+
+const maxVelocityConstant = new constant(0.1);
+const maxVelocity = maxVelocityConstant.value;
+
+const airResistanceConstant = new constant(1e20);
+const airResistance = airResistanceConstant.value;
 
 const stepSize = 1/10;
 
@@ -53,6 +59,34 @@ class physics {
     if (radAlpha >= 1) {return;}
 
     
+  }
+
+  calculateAirResistance() {
+    // const veloDir = this.velocity.clone().normalize().negate();
+
+    let veloMag = airResistance * this.velocity.length();
+
+    if (veloMag === 0) {
+      return 0;
+    }
+
+    else if (veloMag < 1 ) {
+      veloMag === 1;
+    }
+ 
+    const returnVal = (airResistance / (veloMag * veloMag)) || 0;
+
+
+
+    return returnVal;
+  }
+
+  clampVelo() {
+    if (this.velocity.length() > maxVelocity) {
+      this.velocity.multiplyScalar( maxVelocity / this.velocity.length() );
+    }
+
+    // console.log(this.velocity.length());
   }
 
   findForceOnObjectAndMinDist() {
@@ -85,7 +119,12 @@ class physics {
     const originGravityScale = calculateOriginGravitationalForce(this);
     const originGravityForce = this.position.clone().normalize().negate().multiplyScalar(originGravityScale);
 
+    // add in air resistance
+    const airResistanceScale = this.calculateAirResistance();
+    const airResistanceForce = this.velocity.clone().normalize().negate().multiplyScalar(airResistanceScale);
+
     sumOfForces.add(originGravityForce);
+    sumOfForces.add(airResistanceForce);
 
     return [sumOfForces, minDistObj];
   }
@@ -97,6 +136,7 @@ class physics {
      * 2. Use F=ma to find accelerate, aka new velo vector?
      * 3. Use new velo vector found somehow from above to move and update velo
      */
+
     const [force, minDist] = this.findForceOnObjectAndMinDist();
     const acceleration = force.multiplyScalar(1 / this.mass);
     // console.log(acceleration);
@@ -104,6 +144,8 @@ class physics {
     const deltaV = acceleration.multiplyScalar(stepSize);
     // deltaPosition.add(this.velocity);
     this.velocity.add(deltaV);
+
+    // this.clampVelo();
     // console.log(deltaPosition);
     this.position.add(this.velocity);
     // this.velocity.copy(deltaPosition.multiplyScalar(1/stepSize));
