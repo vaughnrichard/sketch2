@@ -11,6 +11,7 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { initGUI } from './gui.js';
 
 /**
  * The data structure representing the visualization scene.
@@ -37,7 +38,9 @@ class visualization {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize( window.innerWidth, window.innerHeight );
-    })
+    });
+
+    initGUI();
   }
 
   animate() {

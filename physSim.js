@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { vis } from './init.js';
 import { sphereArray } from './main.js'
+import { physParameters } from './parameters.js';
 
 /**
  * Simulation Parameters
@@ -31,7 +32,7 @@ const maxVelocity = maxVelocityConstant.value;
 const airResistanceConstant = new constant(1e20);
 const airResistance = airResistanceConstant.value;
 
-const stepSize = 1/10;
+const stepSize = 1/60;
 
 /**
  * End Parameters
@@ -63,8 +64,7 @@ class physics {
 
   calculateAirResistance() {
     // const veloDir = this.velocity.clone().normalize().negate();
-
-    let veloMag = airResistance * this.velocity.length();
+    let veloMag = this.velocity.length() * physParameters['airResistanceConstant'];
 
     if (veloMag === 0) {
       return 0;
@@ -74,7 +74,7 @@ class physics {
       veloMag === 1;
     }
  
-    const returnVal = (airResistance / (veloMag * veloMag)) || 0;
+    const returnVal = (veloMag * veloMag) || 0;
 
 
 
@@ -82,8 +82,8 @@ class physics {
   }
 
   clampVelo() {
-    if (this.velocity.length() > maxVelocity) {
-      this.velocity.multiplyScalar( maxVelocity / this.velocity.length() );
+    if (this.velocity.length() > physParameters['maxVelocityConstant']) {
+      this.velocity.multiplyScalar( physParameters['maxVelocityConstant'] / this.velocity.length() );
     }
 
     // console.log(this.velocity.length());
@@ -121,7 +121,8 @@ class physics {
 
     // add in air resistance
     const airResistanceScale = this.calculateAirResistance();
-    const airResistanceForce = this.velocity.clone().normalize().negate().multiplyScalar(airResistanceScale);
+    const airResistanceForce = this.velocity.clone().normalize().multiplyScalar(-airResistanceScale);
+    // console.log(airResistanceScale);
 
     sumOfForces.add(originGravityForce);
     sumOfForces.add(airResistanceForce);
@@ -160,7 +161,7 @@ function calculateGravitationalForce(obj1, obj2) {
 
   // console.log(distanceBetweenPoints);
 
-  const gravitationalForce = G * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
+  const gravitationalForce = physParameters['particleGravity'] * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
   return gravitationalForce;
 }
 
@@ -168,13 +169,13 @@ function calculateElectricalForce(obj1, obj2) {
   const pos1 = obj1.position; const pos2 = obj2.position;
   const distanceBetweenPoints = new THREE.Vector3().subVectors(pos1,pos2).length();
 
-  const electricalForce = C * ( (obj1.charge * obj2.charge) / ( distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints) );
+  const electricalForce = physParameters['electricConstant'] * ( (obj1.charge * obj2.charge) / ( distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints) );
   return electricalForce;
 }
 
 function calculateOriginGravitationalForce(obj) {
   const dist = obj.position.length();
-  const gravitationalForce = originG * ( dist * dist );
+  const gravitationalForce = physParameters['originGravity'] * ( dist * dist );
 
   return gravitationalForce;
 }
