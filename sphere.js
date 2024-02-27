@@ -153,7 +153,7 @@ function createCircleFromPoints(numberOfPoints, radius, position, rotationArray,
 
   adjustCirclePoints(points, rotationArray);
 
-  const geometry = new THREE.SphereGeometry( .005, 32, 16 ); 
+  const geometry = new THREE.SphereGeometry( .015, 4, 2 ); 
   const material = new THREE.MeshBasicMaterial( { color: color } );
 
 
