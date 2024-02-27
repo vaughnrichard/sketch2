@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { vis } from './init.js';
-import { sphereArray } from './main.js'
 import { physParameters } from './parameters.js';
 
 /**
@@ -52,19 +51,6 @@ class physics {
     this.radiusAfterForce = 1;
   }
 
-  adjustRadiusOnDistanceToNearestNeighbor(obj1, obj2) {
-    const distanceMag = sphere.position.clone().sub(this.position).length();
-
-    const rad1 = obj1.radius;
-    const rad2 = obj2.radius;
-
-    const radAlpha = (rad1 + rad2) / distanceMag;
-
-    if (radAlpha >= 1) {return;}
-
-    
-  }
-
   calculateAirResistance() {
     // const veloDir = this.velocity.clone().normalize().negate();
     let veloMag = this.velocity.length() * physParameters['airResistanceConstant'];
@@ -97,7 +83,7 @@ class physics {
     let minDistObj;
     let minDist = Infinity;
 
-    sphereArray.forEach( (sphere) => {
+    vis.objects.forEach( (sphere) => {
       if (sphere.id === this.id) {return;}
       const forceDirection = sphere.position.clone().sub(this.position); // force dir for particleGravity
 

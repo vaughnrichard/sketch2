@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { vis } from './init.js'
 import { physics } from './physSim.js';
-import { sphereArray } from './main.js'
 
 const waveAdjustfactor = (1 / 60 / Math.PI * 10) * 1/2;
 
@@ -30,7 +29,6 @@ class sphere extends physics {
     this.id = properties['id'] || null;
 
 
-    // this.circles = new Array();
     this.points = new Array();
     this.objectList = new Array();
     
@@ -56,8 +54,8 @@ class sphere extends physics {
     let otherRadius = 0;
     let minDist = Infinity;
 
-    for (let i = 0; i < sphereArray.length; i++) {
-      const currSphere = sphereArray[i];
+    for (let i = 0; i < vis.objects.length; i++) {
+      const currSphere = vis.objects[i];
 
       if (currSphere.id === this.id) { continue; }
 
@@ -67,31 +65,19 @@ class sphere extends physics {
         minDist = currDist;
         otherRadius = currSphere.radius;
       }
-
-      // minDist = Math.min( minDist, currDist );
     }
 
 
     if (minDist < otherRadius + this.radius) {
       const scaleFactor = minDist / (otherRadius + this.radius);
-      // console.log('here');
-      // console.log(scaleFactor);
+
       this.scalePointsToRadius(scaleFactor);
     }
-    //  else {
-      // this.scalePointsToRadius(1);
-    // }
-    // const scaleFactor = (otherRadius !== 0) ? otherRadius : 1;
 
   }
 
   takeStep() {
-    // console.log('here');
-    // console.log("before", this.position);
-    // console.log("velo", this.velocity);
     super.takeStep();
-
-    // console.log("newPos", this.position);
     this.moveToWorldPos(this.position);
     this.adjustRadiusByForces();
   }

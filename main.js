@@ -41,8 +41,6 @@ function animate() {
 	renderer.render( scene, camera );
 }
 
-const sphereArray = []
-
 const sphere0 = new sphere({
 	position: new THREE.Vector3(3, 0, 0),
 	pointsPerCircle: 50,
@@ -54,7 +52,6 @@ const sphere0 = new sphere({
 	charge: 1,
   id: 0
 });
-sphereArray.push(sphere0);
 
 const sphere1 = new sphere({
 	position: new THREE.Vector3(0, 0, 0),
@@ -67,7 +64,6 @@ const sphere1 = new sphere({
 	charge: 1,
   id: 1
 });
-sphereArray.push(sphere1);
 
 const sphere2 = new sphere({
 	position: new THREE.Vector3(-3, 0, 3),
@@ -80,7 +76,6 @@ const sphere2 = new sphere({
 	charge: 1,
   id: 2
 });
-sphereArray.push(sphere2);
 
 const sphere3 = new sphere({
 	position: new THREE.Vector3(5, 2, -5),
@@ -93,8 +88,5 @@ const sphere3 = new sphere({
 	charge: 1,
   id: 3
 });
-sphereArray.push(sphere3);
 
 animate();
-
-export {sphereArray}

@@ -18,8 +18,7 @@ const physParameters = {
 
 const simParameters = {
   stepSize: 1/60,
-  paused: false,
-  objectArray: []
+  paused: false
 }
 
 export { physParameters, simParameters }
