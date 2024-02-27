@@ -17,6 +17,7 @@ class constant {
 };
 
 const gravity_damp_factor = 1e-3;
+const particle_damp_factor = 1e-2;
 const electric_damp_factor = 1/2;
 
 const originGravity = new constant(1e-4);
@@ -154,7 +155,7 @@ function calculateGravitationalForce(obj1, obj2) {
 
   // console.log(distanceBetweenPoints);
 
-  const gravitationalForce = gravity_damp_factor * physParameters['particleGravity'] * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
+  const gravitationalForce = particle_damp_factor * physParameters['particleGravity'] * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
   return gravitationalForce;
 }
 

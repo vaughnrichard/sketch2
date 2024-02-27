@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { vis } from './init.js'
 import { physics } from './physSim.js';
+import { simParameters } from './parameters.js';
 
 const waveAdjustfactor = (1 / 60 / Math.PI * 10) * 1/2;
 
@@ -182,6 +183,7 @@ function addSphere(num_lines, pointsPerCircle, radius, position, color, newSpher
     addCircletoScene(pointsPerCircle, radius, position, [0, (i * (Math.PI * 2 / num_lines)), 0], color, newSphere);
   }
 
+  simParameters.particleList.push(newSphere);
   vis.objects.push(newSphere);
 }
 
