@@ -36,12 +36,27 @@ function initGUI() {
   particleFolder.add( simParameters, 'mass').name('Mass');
   particleFolder.add( simParameters, 'charge').name('Charge');
 
-  particleFolder.add( simParameters, 'addPart').name('Add Particle');
+  particleFolder.add( simParameters, 'addPart').name('Add Particle').onChange(() => {
+    updateGuiDisplays(particleFolder);
+  });
 
   // function addParticle() {
   //   new sphere();
   // }
 
+}
+
+function updateGuiDisplays(folder) {
+  const folders = folder.folders;
+  const controllers = folder.controllers;
+
+  folders.forEach( (newFolder) => {
+    updateGuiDisplays(newFolder);
+  });
+
+  controllers.forEach( (controller) => {
+    controller.updateDisplay();
+  });
 }
 
 export { initGUI }
