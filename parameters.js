@@ -9,14 +9,16 @@ class constant {
 };
 
 const physParameters = {
-  originGravity : 1e-4,
-  particleGravity : .1,
-  electricConstant : .3,
-  maxVelocityConstant : .1,
+  originGravity : 1,
+  particleGravity : 1,
+  electricConstant : 1,
+  maxVelocityConstant : 1,
   airResistanceConstant : 1
-  
 }
 
-const stepSize = 1/60;
+const simParameters = {
+  stepSize: 1/60,
+  paused: false
+}
 
-export { physParameters }
+export { physParameters, simParameters }

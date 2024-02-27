@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { vis } from './init.js';
 import { sphere } from './sphere.js';
+import { simParameters } from './parameters.js';
 
 
 const scene = vis.scene;
@@ -41,10 +42,13 @@ let step = 0;
 function animate() {
 	requestAnimationFrame( animate );
 
-	vis.objects.forEach( (sphere) => {
-		sphere.takeStep();
-		// sphere.vibrate();
-	});
+	if (!simParameters.paused) {
+
+		vis.objects.forEach( (sphere) => {
+			sphere.takeStep();
+			// sphere.vibrate();
+		});
+	}
 
 	renderer.render( scene, camera );
 }

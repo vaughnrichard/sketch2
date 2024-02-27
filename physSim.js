@@ -17,6 +17,9 @@ class constant {
   }
 };
 
+const gravity_damp_factor = 1e-3;
+const electric_damp_factor = 1/2;
+
 const originGravity = new constant(1e-4);
 const originG = originGravity.value;
 
@@ -122,6 +125,10 @@ class physics {
     // add in air resistance
     const airResistanceScale = this.calculateAirResistance();
     const airResistanceForce = this.velocity.clone().normalize().multiplyScalar(-airResistanceScale);
+
+    if (airResistanceScale > this.velocity.length()) {
+      airResistanceForce.multiplyScalar( this.velocity.length() / airResistanceScale );
+    }
     // console.log(airResistanceScale);
 
     sumOfForces.add(originGravityForce);
@@ -161,7 +168,7 @@ function calculateGravitationalForce(obj1, obj2) {
 
   // console.log(distanceBetweenPoints);
 
-  const gravitationalForce = physParameters['particleGravity'] * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
+  const gravitationalForce = gravity_damp_factor * physParameters['particleGravity'] * ( (obj1.mass * obj2.mass) / ( distanceBetweenPoints * distanceBetweenPoints ) );
   return gravitationalForce;
 }
 
@@ -169,15 +176,15 @@ function calculateElectricalForce(obj1, obj2) {
   const pos1 = obj1.position; const pos2 = obj2.position;
   const distanceBetweenPoints = new THREE.Vector3().subVectors(pos1,pos2).length();
 
-  const electricalForce = physParameters['electricConstant'] * ( (obj1.charge * obj2.charge) / ( distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints) );
+  const electricalForce = electric_damp_factor * physParameters['electricConstant'] * ( (obj1.charge * obj2.charge) / ( distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints * distanceBetweenPoints) );
   return electricalForce;
 }
 
 function calculateOriginGravitationalForce(obj) {
   const dist = obj.position.length();
-  const gravitationalForce = physParameters['originGravity'] * ( dist * dist );
+  const gravForce = physParameters['originGravity'] * ( dist * dist ) * gravity_damp_factor;
 
-  return gravitationalForce;
+  return (physParameters['originGravity'] >= 0) ? gravForce : (1/gravForce);
 }
 
 export {physics}
