@@ -21,18 +21,7 @@ const origin = new THREE.Mesh( geometry, material );
 origin.position.set(0, 0, 0);
 scene.add( origin );
 
-// const testsphere = new sphere({
-// 	position: new THREE.Vector3(3, 0, 0),
-// 	pointsPerCircle: 50,
-// 	num_lines: 40,
-// 	radius: 1,
-// 	color: 0xff0000,
-// 	velocity: new THREE.Vector3(0, 0, .01),
-// 	mass: 1,
-// 	charge: 1
-// })
-
-camera.position.set(0, 5, 0);
+camera.position.set(0, 10, 0);
 
 camera.up.set(0,0,1);
 camera.lookAt( 0, 0, 0);
@@ -43,7 +32,6 @@ function animate() {
 	requestAnimationFrame( animate );
 
 	if (!simParameters.paused) {
-
 		vis.objects.forEach( (sphere) => {
 			sphere.takeStep();
 			// sphere.vibrate();

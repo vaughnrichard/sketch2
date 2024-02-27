@@ -182,9 +182,10 @@ function calculateElectricalForce(obj1, obj2) {
 
 function calculateOriginGravitationalForce(obj) {
   const dist = obj.position.length();
-  const gravForce = physParameters['originGravity'] * ( dist * dist ) * gravity_damp_factor;
+  let gravForce = physParameters['originGravity'] * ( dist * dist );
+  gravForce = (physParameters['originGravity'] >= 0) ? gravForce : 1/gravForce;
 
-  return (physParameters['originGravity'] >= 0) ? gravForce : (1/gravForce);
+  return gravForce * gravity_damp_factor;
 }
 
 export {physics}

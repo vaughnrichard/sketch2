@@ -5,12 +5,12 @@ const gui = new GUI();
 
 function initGUI() {
   
-  gui.add( physParameters, 'originGravity' );  // Checkbox
-  gui.add( physParameters, 'particleGravity' ); // Button
-  gui.add( physParameters, 'electricConstant' );   // Text Field
-  gui.add( physParameters, 'maxVelocityConstant' );   // Number Field
-  gui.add( physParameters, 'airResistanceConstant' );   // Number Field
-  gui.add( simParameters, 'paused');
+  gui.add( physParameters, 'originGravity' ).name("Origin Gravity Constant");
+  gui.add( physParameters, 'particleGravity' ).name("Particle Gravity Constant");
+  gui.add( physParameters, 'electricConstant' ).name("Electric Force Constant");
+  gui.add( physParameters, 'maxVelocityConstant' ).name("Max Velocity");
+  gui.add( physParameters, 'airResistanceConstant' ).name('Air Resistance');
+  gui.add( simParameters, 'paused').name('Paused');
 }
 
 export { initGUI }
